@@ -1,0 +1,65 @@
+<resources>
+    <style name="Theme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#000000</item>
+    </style>
+
+    <style name="KeyboardRootStyle">
+        <item name="android:background">#000000</item>
+    </style>
+
+    <style name="KeyboardBarStyle">
+        <item name="android:background">#000000</item>
+    </style>
+
+    <style name="KeyboardBarButtonStyle">
+        <item name="android:background">#1D1D21</item>
+    </style>
+
+    <style name="KeyContainerStyle">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@drawable/key1</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="KeyLabelBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_color_aux</item>
+        <item name="android:textSize">@dimen/text_size_aux</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+    </style>
+
+    <style name="KeyLabel.Center" parent="KeyLabelBase">
+        <item name="android:textColor">@color/text_color_center</item>
+        <item name="android:textSize">@dimen/text_size_center</item>
+    </style>
+
+    <style name="KeyLabel.Corner" parent="KeyLabelBase">
+        <item name="android:textSize">@dimen/text_size_aux</item>
+        <item name="android:textColor">@color/text_color_aux</item>
+    </style>
+
+    <style name="KeyLabel.Left" parent="KeyLabelBase">
+        <item name="android:textSize">@dimen/text_size_aux</item>
+        <item name="android:textColor">@color/text_color_aux</item>
+    </style>
+
+    <style name="KeyLabel.Right" parent="KeyLabelBase">
+        <item name="android:textSize">@dimen/text_size_aux</item>
+        <item name="android:textColor">@color/text_color_aux</item>
+    </style>
+
+    <style name="KeyLabel.Up" parent="KeyLabelBase">
+        <item name="android:textSize">@dimen/text_size_aux</item>
+        <item name="android:textColor">@color/text_color_aux</item>
+    </style>
+
+    <style name="KeyLabel.Down" parent="KeyLabelBase">
+        <item name="android:textSize">@dimen/text_size_aux</item>
+        <item name="android:textColor">@color/text_color_aux</item>
+    </style>
+</resources>

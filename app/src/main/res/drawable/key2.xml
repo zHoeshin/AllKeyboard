@@ -1,0 +1,17 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:inset="2dp">
+    <selector>
+        <item android:state_pressed="true">
+            <shape>
+                <solid android:color="#2E2E35" />
+                <corners android:radius="8dp" />
+            </shape>
+        </item>
+        <item>
+            <shape>
+                <solid android:color="#222226" />
+                <corners android:radius="8dp" />
+            </shape>
+        </item>
+    </selector>
+</inset>

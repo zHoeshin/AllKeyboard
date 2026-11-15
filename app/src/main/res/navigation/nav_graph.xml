@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/layoutListFragment">
+
+    <fragment
+        android:id="@+id/layoutListFragment"
+        android:name="nn.zhoeshin.allkeyboard.LayoutListFragment"
+        android:label="Layouts" >
+        <action
+            android:id="@+id/transition_layouts2settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="nn.zhoeshin.allkeyboard.SettingsFragment"
+        android:label="Settings" >
+        <action
+            android:id="@+id/transition_settings2layouts"
+            app:destination="@id/layoutListFragment" />
+    </fragment>
+
+</navigation>

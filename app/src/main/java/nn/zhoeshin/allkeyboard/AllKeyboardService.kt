@@ -225,7 +225,7 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
     }
 
     override fun onComputeInsets(outInsets: Insets) {
-        outInsets.contentTopInsets = screenHeight + navBarHeight
+        outInsets.contentTopInsets = screenHeight + navBarHeight + (window.window?.attributes?.y ?: 0)
     }
 
     fun createLayout(layout: MutableMap<String, List<KeyData>>) {

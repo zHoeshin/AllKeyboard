@@ -47,6 +47,7 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
     override var currentState = "main"
     override var returnState: String? = null
 
+    var navBarHeight: Int = 0
 
     companion object {
         @Volatile
@@ -203,19 +204,28 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
 
         buildLayouts()
 
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
-            if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
-                view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
-            } else {
-                view.setPadding(0, 0, 0, 0)
-            }
-            insets
-        }
+        navBarHeight = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            .let { id -> if (id > 0) resources.getDimensionPixelSize(id) else 0 }
+
+        rootView.setPadding(0, 0, 0, navBarHeight)
+
+//        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+//            if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
+//                view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
+//            } else {
+//                view.setPadding(0, 0, 0, 0)
+//            }
+//            insets
+//        }
 
         //window.window!!.findViewById<ViewGroup>(android.R.id.content).addView(rootView)
         //return null
 
         return rootView
+    }
+
+    override fun onComputeInsets(outInsets: Insets) {
+        outInsets.contentTopInsets = screenHeight + navBarHeight
     }
 
     fun createLayout(layout: MutableMap<String, List<KeyData>>) {

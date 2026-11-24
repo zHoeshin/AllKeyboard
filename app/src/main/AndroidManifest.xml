@@ -52,7 +52,7 @@
             android:name=".AllKeyboardService"
             android:exported="false"
             android:permission="android.permission.BIND_INPUT_METHOD"
-            android:theme="@style/Theme"
+            android:theme="@style/KeyboardTheme"
             tools:ignore="ExtraText">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />

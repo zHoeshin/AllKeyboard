@@ -123,7 +123,7 @@ class ClipboardView(context: Context) : FrameLayout(context), KeyboardContainer 
             history = Gson().fromJson(contents, type)
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val currentlastitem = clipboard.primaryClip?.getItemAt(0)
-            val currentlast = currentlastitem?.text
+            val currentlast = currentlastitem?.coerceToText(context)
             if (
                 (!currentlast.isNullOrEmpty() && history.isNotEmpty() && history[0].value != currentlast)
                 || (history.isEmpty() && !currentlast.isNullOrEmpty())

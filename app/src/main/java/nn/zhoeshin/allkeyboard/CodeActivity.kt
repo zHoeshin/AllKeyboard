@@ -110,7 +110,9 @@ class CodeActivity: AppCompatActivity() {
             val clip = ClipData.newPlainText("Layout import error", errorMessage)
             clipboard.setPrimaryClip(clip)
             e.printStackTrace()
-            destFile.writeText("{}")
+            if (!destFile.exists()) {
+                destFile.writeText("{}")
+            }
         }
 
         if (layoutName == SpecialLayout.CLIPBOARD.layoutName) {

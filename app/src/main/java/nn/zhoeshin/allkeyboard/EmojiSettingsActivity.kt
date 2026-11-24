@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import nn.zhoeshin.allkeyboard.databinding.ActivityClipboardSettingsBinding
+import nn.zhoeshin.allkeyboard.databinding.ActivityEmojiSettingsBinding
 
 class EmojiSettingsActivity : AppCompatActivity() {
 

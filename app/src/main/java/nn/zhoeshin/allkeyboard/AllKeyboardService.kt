@@ -204,19 +204,19 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
 
         buildLayouts()
 
-        navBarHeight = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-            .let { id -> if (id > 0) resources.getDimensionPixelSize(id) else 0 }
+//        navBarHeight = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+//            .let { id -> if (id > 0) resources.getDimensionPixelSize(id) else 0 }
+//
+//        rootView.setPadding(0, 0, 0, navBarHeight)
 
-        rootView.setPadding(0, 0, 0, navBarHeight)
-
-//        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
-//            if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
-//                view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
-//            } else {
-//                view.setPadding(0, 0, 0, 0)
-//            }
-//            insets
-//        }
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+            if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
+                view.setPadding(0, 0, 0, insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
+            } else {
+                view.setPadding(0, 0, 0, 0)
+            }
+            insets
+        }
 
         //window.window!!.findViewById<ViewGroup>(android.R.id.content).addView(rootView)
         //return null
@@ -224,9 +224,9 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
         return rootView
     }
 
-    override fun onComputeInsets(outInsets: Insets) {
-        outInsets.contentTopInsets = screenHeight + navBarHeight + (window.window?.attributes?.y ?: 0)
-    }
+//    override fun onComputeInsets(outInsets: Insets) {
+//        outInsets.contentTopInsets = screenHeight + navBarHeight + (window.window?.attributes?.y ?: 0)
+//    }
 
     fun createLayout(layout: MutableMap<String, List<KeyData>>) {
         val newlayout = mutableMapOf<String, View>()
@@ -805,7 +805,7 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
         val dismissLabelPopupRunnable = Runnable {
             labelPopup?.dismiss()
         }
-        lateinit var labelText: TextView
+        var labelText: TextView? = null
         val longPressRunnable = Runnable {
             if (currentPopup == null && !swiping) {
                 mainHandler.removeCallbacks(dismissLabelPopupRunnable)
@@ -851,6 +851,37 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
             }
         }
 
+        fun showLabelPopup(label: String) {
+            if (labelPopup == null && delayPopupDecay > 0) {
+                labelText = TextView(themedContext).apply {
+                    text = label
+                    setPadding(16, 8, 16, 8)
+                    setTextColor(Color.WHITE)
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+                    setBackgroundResource(R.drawable.popup_background)
+                    gravity = Gravity.CENTER
+                    layoutParams = LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT
+                    )
+                }
+                labelPopup = PopupWindow(
+                    labelText,
+                    cellWidth,
+                    cellHeight,
+                    true
+                ).apply {
+                    isFocusable = false
+                    isTouchable = false
+                    animationStyle = 0
+                }
+            }
+            if (labelPopup != null) {
+                labelPopup!!.dismiss()
+                labelPopup!!.showAsDropDown(this, screenWidth / 100, -this.height - labelPopup!!.height)
+            }
+        }
+
         override fun onTouchEvent(event: MotionEvent): Boolean {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -879,32 +910,9 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
                         mainHandler.postDelayed(longPressRunnable, delayLongPress.toLong())
                     }
                     isPressed = true
-                    if (labelPopup == null) {
-                        labelText = TextView(themedContext).apply {
-                            text = keyData.label.center
-                            setPadding(16, 8, 16, 8)
-                            setTextColor(Color.WHITE)
-                            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-                            setBackgroundResource(R.drawable.popup_background)
-                            gravity = Gravity.CENTER
-                            layoutParams = LinearLayout.LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT
-                            )
-                        }
-                        labelPopup = PopupWindow(
-                            labelText,
-                            cellWidth,
-                            cellHeight,
-                            true
-                        ).apply {
-                            isFocusable = false
-                            isTouchable = false
-                            animationStyle = 0
-                        }
+                    if (delayPopupDecay > 0) {
+                        showLabelPopup(keyData.label.center)
                     }
-                    labelPopup?.dismiss()
-                    labelPopup!!.showAsDropDown(this, screenWidth / 100, -this.height - labelPopup!!.height)
                 }
                 MotionEvent.ACTION_MOVE -> {
                     lx = event.rawX
@@ -921,7 +929,10 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
                             } else {
                                 if (dy > 0) "down" else "up"
                             }
-                            labelText.text = if (swipeDirection == "up" && !keyData.swipeUp.isNullOrEmpty()) {
+                            if (labelPopup == null) {
+                                showLabelPopup("")
+                            }
+                            labelText?.text = if (swipeDirection == "up" && !keyData.swipeUp.isNullOrEmpty()) {
                                 keyData.label.up
                             } else if (swipeDirection == "down" && !keyData.swipeDown.isNullOrEmpty()) {
                                 keyData.label.down
@@ -953,7 +964,10 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
                                 doAndRepeat(lastDir)
                             }
                         } else {
-                            labelText.text = keyData.label.center
+                            if (labelPopup == null) {
+                                showLabelPopup("")
+                            }
+                            labelText?.text = keyData.label.center
                             if (lastDir != "none") {
                                 swiping = false
                             }
@@ -1080,7 +1094,11 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
                         currentPopup = null
                     }
                     isPressed = false
-                    mainHandler.postDelayed(dismissLabelPopupRunnable, delayPopupDecay.toLong())
+                    if (delayPopupDecay <= 0) {
+                        dismissLabelPopupRunnable.run()
+                    } else {
+                        mainHandler.postDelayed(dismissLabelPopupRunnable, delayPopupDecay.toLong())
+                    }
                     onEndInput?.invoke()
                 }
                 MotionEvent.ACTION_CANCEL -> {
@@ -1093,7 +1111,11 @@ class AllKeyboardService : InputMethodService(), KeyboardContainer {
                         currentPopup = null
                     }
                     isPressed = false
-                    mainHandler.postDelayed(dismissLabelPopupRunnable, delayPopupDecay.toLong())
+                    if (delayPopupDecay <= 0) {
+                        dismissLabelPopupRunnable.run()
+                    } else {
+                        mainHandler.postDelayed(dismissLabelPopupRunnable, delayPopupDecay.toLong())
+                    }
                     onEndInput?.invoke()
                 }
             }

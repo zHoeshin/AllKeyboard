@@ -64,7 +64,7 @@ class TimersSettingsFragment: Fragment() {
                 val number = text.toIntOrNull()
                 if (number != null) {
                     prefs.edit{ putInt("popupDecay", number) }
-                    AllKeyboardService.instance?.delayRepeat = number
+                    AllKeyboardService.instance?.delayPopupDecay = number
                 } else {
                     decay.setText(prefs.getInt("popupDecay", 75).toString())
                 }

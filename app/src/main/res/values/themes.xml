@@ -19,4 +19,8 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="KeyboardTheme" parent="@android:style/Theme.InputMethod">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
 </resources>

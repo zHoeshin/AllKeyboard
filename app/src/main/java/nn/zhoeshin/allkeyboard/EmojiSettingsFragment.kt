@@ -38,7 +38,7 @@ class EmojiSettingsFragment: Fragment() {
                 val number = text.toIntOrNull()
                 if (number != null) {
                     prefs.edit{ putInt("max", number) }
-                    AllKeyboardService.instance?.clipboardView?.MAXCLIPBOARDITEMS = number
+                    AllKeyboardService.instance?.emojiView?.MAXHISTORYITEMS = number
                 } else {
                     maxHistoryEdit.setText(prefs.getInt("max", 40).toString())
                 }

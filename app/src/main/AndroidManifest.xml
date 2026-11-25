@@ -32,6 +32,11 @@
             android:theme="@style/Theme">
         </activity>
         <activity
+            android:name=".EmojiSettingsActivity"
+            android:exported="true"
+            android:theme="@style/Theme">
+        </activity>
+        <activity
             android:name=".TimersSettingsActivity"
             android:exported="true"
             android:theme="@style/Theme">
